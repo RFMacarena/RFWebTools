@@ -1,0 +1,28 @@
+{% extends 'BaseHTML.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<section class="page-section clearfix">
+    <h2>Aplicacion para realizar el test Winston Lutz con Ball Bearing</h2>
+
+</section>
+
+<section class="page-section clearfix">
+    <form id="f_winsontlutz" action="winstonlutztest" method="post">
+
+        {% csrf_token %}
+
+        <table>
+            {{ form_winstonlutztest }}
+        </table>
+
+        <input type="submit">
+    </form>
+
+    <p><span class="section-content">{{mensaje}}</span></p>
+
+</section>
+
+{% endblock %}
