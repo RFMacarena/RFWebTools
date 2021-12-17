@@ -14,6 +14,7 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import inch
 
+
 class Get_media:
     def __init__(self, lista):
         self.media = None
@@ -21,6 +22,7 @@ class Get_media:
         for elemento in lista:
             s += elemento
             self.media = s / float(len(lista))
+
 
 class Get_varianza:
     def __init__(self, lista):
@@ -32,11 +34,13 @@ class Get_varianza:
             s += ((elemento - m) ** 2)
             self.varianza = s / float(len(lista))
 
+
 # Definición de objeto recta a partir de un par de puntos
 class Recta:
     def __init__(self):
         self.P0 = None
         self.P1 = None
+
 
 class Corte_dos_rectas:
     def __init__(self, PA0, PA1, PB0, PB1):
@@ -64,13 +68,13 @@ class Corte_dos_rectas:
         mod_B = math.sqrt(VBx * VBx + VBy * VBy)
 
         # Producto escalar ambos vectores
-        prod_esc = VAx*VBx + VAy*VBy
+        prod_esc = VAx * VBx + VAy * VBy
 
         # Coseno del angulo que forman ambos vectores
-        coseno = prod_esc /(mod_A*mod_B)
+        coseno = prod_esc / (mod_A * mod_B)
 
         # Estudia paralelismo
-        if abs(round(coseno, 4)) == 1: # No hay corte o está muy alejado de la zona de interés
+        if abs(round(coseno, 4)) == 1:  # No hay corte o está muy alejado de la zona de interés
             x = None
             y = None
         else:
@@ -84,6 +88,7 @@ class Corte_dos_rectas:
 
         self.corte = (x, y)
 
+
 class Get_cortes_rectas:
     def __init__(self, rectas):
         self.corte01 = Corte_dos_rectas(rectas[0].P0, rectas[0].P1, rectas[1].P0, rectas[1].P1).corte
@@ -92,6 +97,7 @@ class Get_cortes_rectas:
         self.corte12 = Corte_dos_rectas(rectas[1].P0, rectas[1].P1, rectas[2].P0, rectas[2].P1).corte
         self.corte13 = Corte_dos_rectas(rectas[1].P0, rectas[1].P1, rectas[3].P0, rectas[3].P1).corte
         self.corte23 = Corte_dos_rectas(rectas[2].P0, rectas[2].P1, rectas[3].P0, rectas[3].P1).corte
+
 
 class Distancia_dos_puntos_2D:
     def __init__(self, P0, P1):
@@ -105,6 +111,7 @@ class Distancia_dos_puntos_2D:
         y = y2 - y1
         self.distancia = np.sqrt(np.power(x, 2) + np.power(y, 2))
 
+
 class Get_rectas_diagonales:
     def __init__(self, cortes, fuera_de_rango):
         self.puntos_cortes_validos = []
@@ -113,17 +120,23 @@ class Get_rectas_diagonales:
         self.punto_0_recta_diagonal_1 = None
         self.punto_1_recta_diagonal_1 = None
 
-        if cortes.corte01[0] != None and abs(cortes.corte01[0]) < fuera_de_rango and cortes.corte01[1] != None and abs(cortes.corte01[1]) < fuera_de_rango:
+        if cortes.corte01[0] != None and abs(cortes.corte01[0]) < fuera_de_rango and cortes.corte01[1] != None and abs(
+                cortes.corte01[1]) < fuera_de_rango:
             self.puntos_cortes_validos.append(cortes.corte01)
-        if cortes.corte02[0] != None and abs(cortes.corte02[0]) < fuera_de_rango and cortes.corte02[1] != None and abs(cortes.corte02[1]) < fuera_de_rango:
+        if cortes.corte02[0] != None and abs(cortes.corte02[0]) < fuera_de_rango and cortes.corte02[1] != None and abs(
+                cortes.corte02[1]) < fuera_de_rango:
             self.puntos_cortes_validos.append(cortes.corte02)
-        if cortes.corte03[0] != None and abs(cortes.corte03[0]) < fuera_de_rango and cortes.corte03[1] != None and abs(cortes.corte03[1]) < fuera_de_rango:
+        if cortes.corte03[0] is not None and abs(cortes.corte03[0]) < fuera_de_rango and cortes.corte03[
+            1] is not None and abs(cortes.corte03[1]) < fuera_de_rango:
             self.puntos_cortes_validos.append(cortes.corte03)
-        if cortes.corte12[0] != None and abs(cortes.corte12[0]) < fuera_de_rango and cortes.corte12[1] != None and abs(cortes.corte12[1]) < fuera_de_rango:
+        if cortes.corte12[0] is not None and abs(cortes.corte12[0]) < fuera_de_rango and cortes.corte12[
+            1] is not None and abs(cortes.corte12[1]) < fuera_de_rango:
             self.puntos_cortes_validos.append(cortes.corte12)
-        if cortes.corte13[0] != None and abs(cortes.corte13[0]) < fuera_de_rango and cortes.corte13[1] != None and abs(cortes.corte13[1]) < fuera_de_rango:
+        if cortes.corte13[0] is not None and abs(cortes.corte13[0]) < fuera_de_rango and cortes.corte13[
+            1] is not None and abs(cortes.corte13[1]) < fuera_de_rango:
             self.puntos_cortes_validos.append(cortes.corte13)
-        if cortes.corte23[0] != None and abs(cortes.corte23[0]) < fuera_de_rango and cortes.corte23[1] != None and abs(cortes.corte23[1]) < fuera_de_rango:
+        if cortes.corte23[0] is not None and abs(cortes.corte23[0]) < fuera_de_rango and cortes.corte23[
+            1] is not None and abs(cortes.corte23[1]) < fuera_de_rango:
             self.puntos_cortes_validos.append(cortes.corte23)
 
         if len(self.puntos_cortes_validos) != 4:
@@ -154,17 +167,20 @@ class Get_rectas_diagonales:
         self.punto_0_recta_diagonal_1 = P10
         self.punto_1_recta_diagonal_1 = P11
 
+
 # Clase donde se define
 # Estructura basica de las imagenes dcm a procesar
 class Imagen:
     def __init__(self):
         self.fichero = ""
-        self.matriz_orig = ""
+        self.matriz_orig = None
         self.rows = ""
-        self.columns= ""
+        self.columns = ""
         self.pixelsizemm = ""
         self.matriz_mediana = ""
+        self.procesed_array = ""
         self.edges = []
+        self.imagen_para_informe = ""
 
         # Rectas del campo de radiacion
         self.rectas = []
@@ -183,6 +199,7 @@ class Imagen:
         self.centro_circulo_pixeles = ""
         self.radio_pixel = ""
 
+
 # Lee el fichero de texto que contiene los nombres de los ficheros de imagenes.
 #       Obtiene cada uno de los nombres de los ficheros dcm.
 #       Verifica que exista cada uno de ellos.
@@ -190,32 +207,198 @@ class Imagen:
 #       Calcula centros de radiacion y laser
 
 class Read_arguments:
+    def __init__(self, im_dic, sigma, low, high):
+        self.imagenes = []
+        lista_ficheros = []
+        lista_tipos = []
+
+        # Crea la lista de los ficheros dcm
+        try:
+            # Prepara el array de imagenes
+            for tipo, ds in im_dic.items():
+                print(tipo)
+                imagen = Imagen()
+
+                rdh = Read_Dicom_Header(ds)
+
+                imagen.rows = rdh.rows
+                imagen.columns = rdh.columns
+                # Para las imagenes de G90 y G180 hace un flip del eje "x" del flat panel.
+                # Solo en estos dos casos se invierte el eje del flat panel respecto de un sistema de ejes de la sala.
+                if tipo != 'G90' and tipo != 'G180':
+                    imagen.matriz_orig = ds.pixel_array
+                else:
+                    imagen.matriz_orig = np.fliplr(ds.pixel_array)
+                imagen.pixelsizemm = rdh.pizel_size_iso_mm
+
+
+
+                # Aplica filtro de mediana 3x3
+                imagen.matriz_mediana = cv2.medianBlur(imagen.matriz_orig, 3)
+
+                matriz = imagen.matriz_mediana / 256
+                imagen.procesed_array = matriz.astype(int)
+
+                imagen.edges = canny(imagen.procesed_array, sigma=sigma, low_threshold=low, high_threshold=high)
+                # plt.plot()
+                # plt.imshow(self.imagenes[i].edges)
+                # plt.show()
+
+                # Rectas que definen el campo de radiacion
+                # Precision de 0.5 grados.
+                tested_angles = np.linspace(-np.pi / 2, np.pi / 2, 720, endpoint=False)
+                h, theta, d = hough_line(imagen.edges, theta=tested_angles)
+                row1, col1 = imagen.edges.shape
+                n_rectas = 0
+
+                for _, angle, dist in zip(*hough_line_peaks(h, theta, d)):
+                    if angle != 0:
+                        y0 = (dist - 0 * np.cos(angle)) / np.sin(angle)
+                        y1 = (dist - col1 * np.cos(angle)) / np.sin(angle)
+                        Punto_0 = (0, y0)
+                        Punto_1 = (col1, y1)
+                    else:
+                        # print("Pendiente infinita")
+                        Punto_0 = (dist, 0)
+                        Punto_1 = (dist, row1)
+                    if n_rectas < 4:
+                        imagen.rectas[n_rectas].P0 = Punto_0
+                        imagen.rectas[n_rectas].P1 = Punto_1
+                    else:
+                        break
+                    n_rectas += 1
+
+                # Busca las diagonales del campo de radiacion
+                if n_rectas == 4:
+                    gc = Get_cortes_rectas(imagen.rectas)
+                    """
+                    print("Cortes:")
+                    print("0 y 1: " + str(gc.corte01))
+                    print("0 y 2: " + str(gc.corte02))
+                    print("0 y 3: " + str(gc.corte03))
+                    print("1 y 2: " + str(gc.corte12))
+                    print("1 y 3: " + str(gc.corte13))
+                    print("2 y 3: " + str(gc.corte23))
+                    """
+                    gd = Get_rectas_diagonales(gc, imagen.rows)
+                    """
+                    print("Puntos de la diagonal 0:")
+                    print(str(gd.punto_0_recta_diagonal_0) + " y " + str(gd.punto_1_recta_diagonal_0))
+                    print("Puntos de la diagonal 1:")
+                    print(str(gd.punto_0_recta_diagonal_1) + " y " + str(gd.punto_1_recta_diagonal_1))
+                    """
+                    imagen.diagonales[0].P0 = gd.punto_0_recta_diagonal_0
+                    imagen.diagonales[0].P1 = gd.punto_1_recta_diagonal_0
+                    imagen.diagonales[1].P0 = gd.punto_0_recta_diagonal_1
+                    imagen.diagonales[1].P1 = gd.punto_1_recta_diagonal_1
+
+                    # Corte de las diagonales
+                    cdr = Corte_dos_rectas(gd.punto_0_recta_diagonal_0, gd.punto_1_recta_diagonal_0,
+                                           gd.punto_0_recta_diagonal_1, gd.punto_1_recta_diagonal_1)
+                    imagen.centro_radiacion_pixeles = cdr.corte
+                    # print("Centro de radiacion: " + str(self.imagenes[i].centro_radiacion_pixeles))
+                else:
+                    print("Error!!! Nº de rectas detectadas para campo de radiacion en imagen " +
+                          imagen.fichero + " distinto a 4(" + str(n_rectas) + ")!!!")
+                    sys.exit()
+
+                # Continua con la deteccion del circulo
+                hough_radii = np.arange(5, 20, 2)
+                hough_res = hough_circle(imagen.edges, hough_radii)
+
+                # Busca solo un circulo
+                accums, cx, cy, radii = hough_circle_peaks(hough_res, hough_radii, total_num_peaks=1)
+                if len(cx) == 0:  # No encuentra un circulo
+                    print(
+                        "Error!!! Circulo no detectado en " + imagen.fichero + " !!! Modifica el umbral maximo del filtro de Canny.")
+                    sys.exit()
+                else:
+                    imagen.centro_circulo_pixeles = (cx[0], cy[0])
+                    imagen.radio_pixel = radii[0]
+
+                # Crea imagen para informe con las transformadas de hough
+                imagen.imagen_para_informe = imagen.fichero[0:len(imagen.fichero) - 4] + ".png"
+                image = np.copy(imagen.procesed_array)
+                print(f'Centro pixel: {imagen.centro_circulo_pixeles}')
+                #plt.imshow(imagen)
+                #plt.show()
+                self.zoom_i = 275
+                self.zoom_f = 775
+                # Añade Circulo
+                cv2.circle(image, imagen.centro_circulo_pixeles,
+                           imagen.radio_pixel, (0, 0, 255), 1)
+
+                # Añade Centro circulo
+                Pa = (imagen.centro_circulo_pixeles[0] - 2,
+                      imagen.centro_circulo_pixeles[1])
+                Pb = (imagen.centro_circulo_pixeles[0] + 2,
+                      imagen.centro_circulo_pixeles[1])
+                Pc = (imagen.centro_circulo_pixeles[0],
+                      imagen.centro_circulo_pixeles[1] - 2)
+                Pd = (imagen.centro_circulo_pixeles[0],
+                      imagen.centro_circulo_pixeles[1] + 2)
+                cv2.line(image, Pa, Pb, (0, 0, 255), 1)
+                cv2.line(image, Pc, Pd, (0, 0, 255), 1)
+
+                # Añade Rectas
+                for j in range(4):
+                    P0 = (int(imagen.rectas[j].P0[0]),
+                          int(imagen.rectas[j].P0[1]))
+                    P1 = (int(imagen.rectas[j].P1[0]),
+                          int(imagen.rectas[j].P1[1]))
+                    cv2.line(image, P0, P1, (0, 0, 255), 1)
+
+                # Añade Diagonales
+                for j in range(2):
+                    P0 = (int(imagen.diagonales[j].P0[0]),
+                          int(imagen.diagonales[j].P0[1]))
+                    P1 = (int(imagen.diagonales[j].P1[0]),
+                          int(imagen.diagonales[j].P1[1]))
+                    cv2.line(image, P0, P1, (0, 0, 255), 1)
+
+                img_8bytes = (image).astype('uint8')
+                cv2.imwrite(imagen.imagen_para_informe, img_8bytes[self.zoom_i:self.zoom_f, self.zoom_i:self.zoom_f])
+                self.imagenes.append(imagen)
+
+        except IOError:
+            print("Error!!! El fichero con los nombres de las imagenes no existe!!!")
+            sys.exit()
+
+
+class Read_arguments_from_txt:
     def __init__(self, file, sigma, low, high):
         self.imagenes = []
         lista_ficheros = []
+        lista_tipos = []
 
         # Crea la lista de los ficheros dcm
         try:
             with open(file) as f:
                 buffer = f.readlines()
                 for i in buffer:
-                    l = i.split(':\t')
-                    l = l[1]
-                    cad = l[len(l)-1:len(l)]
-                    if cad == '\n':
-                        l = l[0:len(l)-1]
-                    lista_ficheros.append(l)
+                    cad = i.strip()
+                    pos = cad.find(':')
+                    lista_tipos.append(cad[0:pos])
+                    cad = cad[pos + 1:]
+                    cad = cad.strip()
+                    lista_ficheros.append(cad)
+                # print(lista_tipos)
+                # print(lista_ficheros)
 
-                # Chequea que existan todos los ficheros dcm
+                # Chequea que existan todos los ficheros dcm con la posibilidad de que no exista C90 para APEX
                 for i in range(len(lista_ficheros)):
-                    if os.path.exists(lista_ficheros[i]) == False:
-                        print("Error!!! No existe el fichero de imagen \"" + lista_ficheros[i] + "\"")
+                    if os.path.exists(lista_ficheros[i]) == False and lista_tipos[
+                        i] != "G0_C90_M0":  # APEX no admite giro de colimador de 90º
+                        print("Error!!! No existe el fichero de imagen \"" + lista_tipos[i] + "\"")
                         sys.exit()
 
                 # Prepara el array de imagenes
                 for i in range(len(buffer)):
-                    self.imagenes.append(Imagen())
+                    self.imagenes.append(Imagen())  # Inicializa objeto clase imagen
                     self.imagenes[i].fichero = lista_ficheros[i]
+                    if os.path.exists(lista_ficheros[i]) == False and lista_tipos[i] == "G0_C90_M0":  # APEX
+                        continue
+
                     print("Procesando imagen " + self.imagenes[i].fichero + " ...")
 
                     ds = dicom.dcmread(self.imagenes[i].fichero)
@@ -235,12 +418,13 @@ class Read_arguments:
                     self.imagenes[i].matriz_mediana = cv2.medianBlur(self.imagenes[i].matriz_orig, 3)
 
                     matriz = self.imagenes[i].matriz_mediana / 256
-                    procesed_array = matriz.astype(int)
+                    self.imagenes[i].procesed_array = matriz.astype(int)
 
-                    self.imagenes[i].edges = canny(procesed_array, sigma=sigma, low_threshold=low, high_threshold=high)
-                    #plt.plot()
-                    #plt.imshow(self.imagenes[i].edges)
-                    #plt.show()
+                    self.imagenes[i].edges = canny(self.imagenes[i].procesed_array, sigma=sigma, low_threshold=low,
+                                                   high_threshold=high)
+                    # plt.plot()
+                    # plt.imshow(self.imagenes[i].edges)
+                    # plt.show()
 
                     # Rectas que definen el campo de radiacion
                     # Precision de 0.5 grados.
@@ -307,15 +491,59 @@ class Read_arguments:
                     # Busca solo un circulo
                     accums, cx, cy, radii = hough_circle_peaks(hough_res, hough_radii, total_num_peaks=1)
                     if len(cx) == 0:  # No encuentra un circulo
-                        print("Error!!! Circulo no detectado en " + self.imagenes[i].fichero + " !!! Modifica el umbral maximo del filtro de Canny.")
+                        print("Error!!! Circulo no detectado en " + self.imagenes[
+                            i].fichero + " !!! Modifica el umbral maximo del filtro de Canny.")
                         sys.exit()
                     else:
                         self.imagenes[i].centro_circulo_pixeles = (cx[0], cy[0])
                         self.imagenes[i].radio_pixel = radii[0]
 
+                    # Crea imagen para informe con las transformadas de hough
+                    self.imagenes[i].imagen_para_informe = self.imagenes[i].fichero[
+                                                           0:len(self.imagenes[i].fichero) - 4] + ".png"
+                    imagen = np.copy(self.imagenes[i].procesed_array)
+                    self.zoom_i = 275
+                    self.zoom_f = 775
+                    # Añade Circulo
+                    cv2.circle(imagen, self.imagenes[i].centro_circulo_pixeles,
+                               self.imagenes[i].radio_pixel, (0, 0, 255), 1)
+
+                    # Añade Centro circulo
+                    Pa = (self.imagenes[i].centro_circulo_pixeles[0] - 2,
+                          self.imagenes[i].centro_circulo_pixeles[1])
+                    Pb = (self.imagenes[i].centro_circulo_pixeles[0] + 2,
+                          self.imagenes[i].centro_circulo_pixeles[1])
+                    Pc = (self.imagenes[i].centro_circulo_pixeles[0],
+                          self.imagenes[i].centro_circulo_pixeles[1] - 2)
+                    Pd = (self.imagenes[i].centro_circulo_pixeles[0],
+                          self.imagenes[i].centro_circulo_pixeles[1] + 2)
+                    cv2.line(imagen, Pa, Pb, (0, 0, 255), 1)
+                    cv2.line(imagen, Pc, Pd, (0, 0, 255), 1)
+
+                    # Añade Rectas
+                    for j in range(4):
+                        P0 = (int(self.imagenes[i].rectas[j].P0[0]),
+                              int(self.imagenes[i].rectas[j].P0[1]))
+                        P1 = (int(self.imagenes[i].rectas[j].P1[0]),
+                              int(self.imagenes[i].rectas[j].P1[1]))
+                        cv2.line(imagen, P0, P1, (0, 0, 255), 1)
+
+                    # Añade Diagonales
+                    for j in range(2):
+                        P0 = (int(self.imagenes[i].diagonales[j].P0[0]),
+                              int(self.imagenes[i].diagonales[j].P0[1]))
+                        P1 = (int(self.imagenes[i].diagonales[j].P1[0]),
+                              int(self.imagenes[i].diagonales[j].P1[1]))
+                        cv2.line(imagen, P0, P1, (0, 0, 255), 1)
+
+                    img_8bytes = (imagen).astype('uint8')
+                    cv2.imwrite(self.imagenes[i].imagen_para_informe,
+                                img_8bytes[self.zoom_i:self.zoom_f, self.zoom_i:self.zoom_f])
+
         except IOError:
             print("Error!!! El fichero con los nombres de las imagenes no existe!!!")
             sys.exit()
+
 
 class Read_Dicom_Header:
     def __init__(self, ds):
@@ -324,7 +552,8 @@ class Read_Dicom_Header:
         self.distancia_foco_panel_mm = ds.get("RTImageSID")
         pizel_size_real_mm = ds.get("ImagePlanePixelSpacing")[0]
         radiation_machine_sad = ds.get("RadiationMachineSAD")
-        self.pizel_size_iso_mm = (radiation_machine_sad/self.distancia_foco_panel_mm) * pizel_size_real_mm
+        self.pizel_size_iso_mm = (radiation_machine_sad / self.distancia_foco_panel_mm) * pizel_size_real_mm
+
 
 class Get_Laser:
     def __init__(self, imagenes):
@@ -377,7 +606,7 @@ class Get_Laser:
 
         # De las imagenes de colimador
         self.OK_colimador = True
-        lista = [0, 4, 5, 6] # Colimador 0, 90, 180 y 270
+        lista = [0, 4, 5, 6]  # Colimador 0, 90, 180 y 270
         for i in lista:
             if imagenes[i].matriz_orig is None and i != 4:  # El APEX no admite giro de colimador a 90º !!!
                 self.OK_colimador = False
@@ -465,6 +694,7 @@ class Get_Laser:
         else:
             self.media_z_total_laser = None
             self.sigma_z_total_laser = None
+
 
 # Calcula la posicion 3D del centro de radiacion para gantry, colimador, mesa y combinada
 class Get_centro_radiacion:
@@ -607,6 +837,7 @@ class Get_centro_radiacion:
             self.media_z_total_radiacion = None
             self.sigma_z_total_radiacion = None
 
+
 # Posicion del centro de radiacion, cuadrado.
 # Media, sigma y pearson
 class Radiacion:
@@ -619,6 +850,7 @@ class Radiacion:
         self.Pearson_x = None
         self.Pearson_y = None
         self.Pearson_z = None
+
 
 # Posicion del centro de la bola, laser.
 # Media, sigma y pearson
@@ -633,45 +865,98 @@ class Laser:
         self.Pearson_y = None
         self.Pearson_z = None
 
+
 class Evaluacion:
-    def __init__(self, laser, radiacion):
+    def __init__(self, imagenes, laser, radiacion):
+        Tolerancia_mm_diferencia_1D = 0.7
+        Tolerancia_mm_diferencia_3D = 1.0
+        pixel_size_mm = imagenes[0].pixelsizemm
+
         if laser.OK_gantry == True and radiacion.OK_gantry == True:
             self.x_gantry = laser.laser3D[0].Pos3D_media[0] - radiacion.radiacion3D[0].Pos3D_media[0]
+            if abs(self.x_gantry * pixel_size_mm) > Tolerancia_mm_diferencia_1D:
+                print("Excedida Tolerancia 1D en \'X' para diferencia entre laser y radiacion en gantry: " + str(
+                    self.x_gantry * pixel_size_mm) + " !!!")
             self.y_gantry = laser.laser3D[0].Pos3D_media[1] - radiacion.radiacion3D[0].Pos3D_media[1]
+            if abs(self.y_gantry * pixel_size_mm) > Tolerancia_mm_diferencia_1D:
+                print("Excedida Tolerancia 1D en \'Y' para diferencia entre laser y radiacion en gantry: " + str(
+                    self.y_gantry * pixel_size_mm) + " !!!")
             self.z_gantry = laser.laser3D[0].Pos3D_media[2] - radiacion.radiacion3D[0].Pos3D_media[2]
-            self.distancia3D_pixeles_gantry = np.sqrt(np.power(self.x_gantry, 2) + np.power(self.y_gantry, 2) + np.power(self.z_gantry, 2))
+            if abs(self.z_gantry * pixel_size_mm) > Tolerancia_mm_diferencia_1D:
+                print("Excedida Tolerancia 1D en \'Z' para diferencia entre laser y radiacion en gantry: " + str(
+                    self.z_gantry * pixel_size_mm) + " !!!")
+            self.distancia3D_pixeles_gantry = np.sqrt(
+                np.power(self.x_gantry, 2) + np.power(self.y_gantry, 2) + np.power(self.z_gantry, 2))
+            if abs(self.distancia3D_pixeles_gantry * pixel_size_mm) > Tolerancia_mm_diferencia_3D:
+                print("Excedida Tolerancia 3D para diferencia entre laser y radiacion en gantry: " + str(
+                    self.distancia3D_pixeles_gantry * pixel_size_mm) + " !!!")
 
         if laser.OK_colimador == True and radiacion.OK_colimador:
             self.x_colimador = laser.laser3D[1].Pos3D_media[0] - radiacion.radiacion3D[1].Pos3D_media[0]
+            if abs(self.x_colimador * pixel_size_mm) > Tolerancia_mm_diferencia_1D:
+                print("Excedida Tolerancia 1D en \'X' para diferencia entre laser y radiacion en colimador: " + str(
+                    self.x_colimador * pixel_size_mm) + " !!!")
             self.y_colimador = laser.laser3D[1].Pos3D_media[1] - radiacion.radiacion3D[1].Pos3D_media[1]
+            if abs(self.y_colimador * pixel_size_mm) > Tolerancia_mm_diferencia_1D:
+                print("Excedida Tolerancia 1D en \'Y' para diferencia entre laser y radiacion en colimador: " + str(
+                    self.y_colimador * pixel_size_mm) + " !!!")
             self.distancia3D_pixeles_colimador = np.sqrt(np.power(self.x_colimador, 2) + np.power(self.y_colimador, 2))
+            if abs(self.distancia3D_pixeles_colimador * pixel_size_mm) > Tolerancia_mm_diferencia_3D:
+                print("Excedida Tolerancia 3D para diferencia entre laser y radiacion en colimador: " + str(
+                    self.distancia3D_pixeles_colimador * pixel_size_mm) + " !!!")
 
         if laser.OK_mesa == True and radiacion.OK_mesa == True:
             self.x_mesa = laser.laser3D[2].Pos3D_media[0] - radiacion.radiacion3D[2].Pos3D_media[0]
+            if abs(self.x_mesa * pixel_size_mm) > Tolerancia_mm_diferencia_1D:
+                print("Excedida Tolerancia 1D en \'X' para diferencia entre laser y radiacion en mesa: " + str(
+                    self.x_mesa * pixel_size_mm) + " !!!")
             self.y_mesa = laser.laser3D[2].Pos3D_media[1] - radiacion.radiacion3D[2].Pos3D_media[1]
+            if abs(self.y_mesa * pixel_size_mm) > Tolerancia_mm_diferencia_1D:
+                print("Excedida Tolerancia 1D en \'Y' para diferencia entre laser y radiacion en mesa: " + str(
+                    self.y_mesa * pixel_size_mm) + " !!!")
             self.distancia3D_pixeles_mesa = np.sqrt(np.power(self.x_mesa, 2) + np.power(self.y_mesa, 2))
+            if abs(self.distancia3D_pixeles_mesa * pixel_size_mm) > Tolerancia_mm_diferencia_3D:
+                print("Excedida Tolerancia 3D para diferencia entre laser y radiacion en mesa: " + str(
+                    self.distancia3D_pixeles_mesa * pixel_size_mm) + " !!!")
 
-        # Global
+        # Global. Todas las imagenes en conjunto
         if laser.media_x_total_laser is not None and radiacion.media_x_total_radiacion is not None:
             self.x_global = laser.media_x_total_laser - radiacion.media_x_total_radiacion
+            if abs(self.x_global * pixel_size_mm) > Tolerancia_mm_diferencia_1D:
+                print("Excedida Tolerancia 1D en \'X' para diferencia entre laser y radiacion en global: " + str(
+                    self.x_global * pixel_size_mm) + " !!!")
         else:
             self.x_global = None
 
         if laser.media_y_total_laser is not None and radiacion.media_y_total_radiacion is not None:
             self.y_global = laser.media_y_total_laser - radiacion.media_y_total_radiacion
+            if abs(self.y_global * pixel_size_mm) > Tolerancia_mm_diferencia_1D:
+                print("Excedida Tolerancia 1D en \'Y' para diferencia entre laser y radiacion en global: " + str(
+                    self.y_global * pixel_size_mm) + " !!!")
         else:
             self.y_global = None
 
         if laser.media_z_total_laser is not None and radiacion.media_z_total_radiacion is not None:
             self.z_global = laser.media_z_total_laser - radiacion.media_z_total_radiacion
+            if abs(self.z_global * pixel_size_mm) > Tolerancia_mm_diferencia_1D:
+                print("Excedida Tolerancia 1D en \'Z' para diferencia entre laser y radiacion en global: " + str(
+                    self.z_global * pixel_size_mm) + " !!!")
         else:
             self.z_global = None
 
         if self.x_global is not None and self.y_global is not None and self.z_global is not None:
-            self.distancia3D_pixeles_global = np.sqrt(np.power(self.x_global, 2) + np.power(self.y_global, 2) + np.power(self.z_global, 2))
+            self.distancia3D_pixeles_global = np.sqrt(
+                np.power(self.x_global, 2) + np.power(self.y_global, 2) + np.power(self.z_global, 2))
+            if abs(self.distancia3D_pixeles_global * pixel_size_mm) > Tolerancia_mm_diferencia_3D:
+                print("Excedida Tolerancia 3D para diferencia entre laser y radiacion en global: " + str(
+                    self.distancia3D_pixeles_global * pixel_size_mm) + " !!!")
         else:
             if self.z_global is None:
                 self.distancia3D_pixeles_global = np.sqrt(np.power(self.x_global, 2) + np.power(self.y_global, 2))
+                if abs(self.distancia3D_pixeles_global * pixel_size_mm) > Tolerancia_mm_diferencia_3D:
+                    print("Excedida Tolerancia 3D para diferencia entre laser y radiacion en global: " + str(
+                        self.distancia3D_pixeles_global * pixel_size_mm) + " !!!")
+
 
 class Dibuja_cruceta_en_array:
     def __init__(self, _array, puntos_1, puntos_2, longitud, ancho, color_1, color_2, Flag):
@@ -682,7 +967,7 @@ class Dibuja_cruceta_en_array:
             if Flag == True:
                 self.array3D = np.copy(array).astype(np.float)
             else:
-                self.array3D = np.ones((shape[0], shape[1], shape[2]))*255
+                self.array3D = np.ones((shape[0], shape[1], shape[2])) * 255
         else:
             if Flag == True:
                 self.array3D = np.zeros((shape[0], shape[1], 3)).astype(np.float)
@@ -693,7 +978,7 @@ class Dibuja_cruceta_en_array:
 
         if Flag == True:
             for i in range(3):
-                self.array3D[:, :, i] = self.array3D[:, :, i]/(2**16-1)
+                self.array3D[:, :, i] = self.array3D[:, :, i] / (2 ** 16 - 1)
 
         shape = self.array3D.shape
 
@@ -745,8 +1030,9 @@ class Dibuja_cruceta_en_array:
                     for k in range(3):
                         self.array3D[i, j, k] = color_2[k]
 
+
 class Genera_Informe:
-    def __init__(self, output_path, imagenes, laser, radiacion):
+    def __init__(self, output_path, array, imagenes, laser, radiacion):
         centro_laser_crucetas_gantry = []
         centro_radiacion_crucetas_gantry = []
         centro_laser_crucetas_colimador = []
@@ -755,9 +1041,7 @@ class Genera_Informe:
         centro_radiacion_crucetas_mesa = []
 
         cadena_0 = (time.strftime("%d/%m/%y")).replace("/", "_")
-        #filename_out = output_path + "Informe_Ball_Bearing_" + cadena_0 + ".pdf"
-        filename_out = "Informe_Ball_Bearing.pdf"
-        filename_out = os.path.join(output_path, filename_out)
+        filename_out = output_path + "Informe_Ball_Bearing_" + cadena_0 + ".pdf"
         print("¡¡¡Se va a crear Informe de test W/L : " + filename_out + "!!!")
 
         doc = SimpleDocTemplate(filename_out, pagesize=letter,
@@ -775,7 +1059,8 @@ class Genera_Informe:
         Story.append(Paragraph(ptext, styles["Normal"]))
         Story.append(Spacer(1, 25))
 
-        linea = "Tamaño Pixel (mm): " + str(imagenes[0].pixelsizemm) # Todas las imagenes deben tener el mismo tamaño de pixel
+        linea = "Tamaño Pixel (mm): " + str(
+            imagenes[0].pixelsizemm)  # Todas las imagenes deben tener el mismo tamaño de pixel
         ptext = '<font size="10">' + linea + '</font>'
         Story.append(Paragraph(ptext, styles["Normal"]))
         Story.append(Spacer(1, 25))
@@ -792,6 +1077,11 @@ class Genera_Informe:
                 linea = str(imagenes[i].fichero)
                 ptext = '<font size="10">' + linea + '</font>'
                 Story.append(Paragraph(ptext, styles["Normal"]))
+
+                im = Image(imagenes[i].imagen_para_informe, 2 * inch, 2 * inch)
+                Story.append(im)
+                Story.append(Spacer(1, 12))
+                Story.append(Spacer(1, 12))
 
             Story.append(Spacer(1, 5))
             linea = "Laser X, Y, Z:"
@@ -853,7 +1143,8 @@ class Genera_Informe:
             ptext = '<font size="10">' + linea + '</font>'
             Story.append(Paragraph(ptext, styles["Normal"]))
 
-            linea = "Posicion 3D Radiacion: (" + str("{:.2f}".format(radiacion.radiacion3D[0].Pos3D_media[0])) + ", " + str(
+            linea = "Posicion 3D Radiacion: (" + str(
+                "{:.2f}".format(radiacion.radiacion3D[0].Pos3D_media[0])) + ", " + str(
                 "{:.2f}".format(radiacion.radiacion3D[0].Pos3D_media[1])) + ", " + str(
                 "{:.2f}".format(radiacion.radiacion3D[0].Pos3D_media[2])) + ") pixeles"
             ptext = '<font size="10">' + linea + '</font>'
@@ -878,7 +1169,8 @@ class Genera_Informe:
             linea = "Distancia Componentes 2D Laser-Radiacion (X, Y, Z): (" + str("{:.2f}".format(dif_x)) + ", " + str(
                 "{:.2f}".format(dif_y)) + ", " + \
                     str("{:.2f}".format(dif_z)) + ") pixeles, (" + str(
-                "{:.2f}".format(dif_x * imagenes[0].pixelsizemm)) + ", " + str("{:.2f}".format(dif_y * imagenes[0].pixelsizemm)) + \
+                "{:.2f}".format(dif_x * imagenes[0].pixelsizemm)) + ", " + str(
+                "{:.2f}".format(dif_y * imagenes[0].pixelsizemm)) + \
                     ", " + str("{:.2f}".format(dif_z * imagenes[0].pixelsizemm)) + ") mm"
             ptext = '<font size="10">' + linea + '</font>'
             Story.append(Paragraph(ptext, styles["Normal"]))
@@ -913,9 +1205,15 @@ class Genera_Informe:
 
             lista = [0, 4, 5, 6]
             for i in lista:
-                linea = str(imagenes[i].fichero)
-                ptext = '<font size="10">' + linea + '</font>'
-                Story.append(Paragraph(ptext, styles["Normal"]))
+                if imagenes[i].matriz_orig is not None:
+                    linea = str(imagenes[i].fichero)
+                    ptext = '<font size="10">' + linea + '</font>'
+                    Story.append(Paragraph(ptext, styles["Normal"]))
+
+                    im = Image(imagenes[i].imagen_para_informe, 2 * inch, 2 * inch)
+                    Story.append(im)
+                    Story.append(Spacer(1, 12))
+                    Story.append(Spacer(1, 12))
 
             Story.append(Spacer(1, 5))
             linea = "Laser X, Y, Z:"
@@ -929,7 +1227,7 @@ class Genera_Informe:
             ptext = '<font size="10">' + linea + '</font>'
             Story.append(Paragraph(ptext, styles["Normal"]))
 
-            if imagenes[lista[1]].centro_circulo_pixeles is not None:
+            if imagenes[lista[1]].matriz_orig is not None:
                 linea = "..90: (" + str(imagenes[lista[1]].centro_circulo_pixeles[0]) + ", " + str(
                     imagenes[lista[1]].centro_circulo_pixeles[1]) + ", ---)"
                 ptext = '<font size="10">' + linea + '</font>'
@@ -951,35 +1249,36 @@ class Genera_Informe:
             Story.append(Paragraph(ptext, styles["Normal"]))
             Story.append(Spacer(1, 5))
 
-            linea = "... 0: (" + str("{:.2f}".format(imagenes[lista[0]].centro_radiacion_pixeles[0])) + ", " +\
+            linea = "... 0: (" + str("{:.2f}".format(imagenes[lista[0]].centro_radiacion_pixeles[0])) + ", " + \
                     str("{:.2f}".format(imagenes[lista[0]].centro_radiacion_pixeles[1])) + ",---)"
             ptext = '<font size="10">' + linea + '</font>'
             Story.append(Paragraph(ptext, styles["Normal"]))
 
-            if imagenes[lista[1]].centro_radiacion_pixeles is not None:
-                linea = "..90: (" + str("{:.2f}".format(imagenes[lista[1]].centro_radiacion_pixeles[0])) + ", " +\
+            if imagenes[lista[1]].matriz_orig is not None:
+                linea = "..90: (" + str("{:.2f}".format(imagenes[lista[1]].centro_radiacion_pixeles[0])) + ", " + \
                         str("{:.2f}".format(imagenes[lista[1]].centro_radiacion_pixeles[1])) + ", ---)"
                 ptext = '<font size="10">' + linea + '</font>'
                 Story.append(Paragraph(ptext, styles["Normal"]))
 
-            linea = ".180: (" + str("{:.2f}".format(imagenes[lista[2]].centro_radiacion_pixeles[0])) + ", " +\
+            linea = ".180: (" + str("{:.2f}".format(imagenes[lista[2]].centro_radiacion_pixeles[0])) + ", " + \
                     str("{:.2f}".format(imagenes[lista[2]].centro_radiacion_pixeles[1])) + ", ---)"
             ptext = '<font size="10">' + linea + '</font>'
             Story.append(Paragraph(ptext, styles["Normal"]))
 
-            linea = ".270: (" + str("{:.2f}".format(imagenes[lista[3]].centro_radiacion_pixeles[0])) + ", " +\
+            linea = ".270: (" + str("{:.2f}".format(imagenes[lista[3]].centro_radiacion_pixeles[0])) + ", " + \
                     str("{:.2f}".format(imagenes[lista[3]].centro_radiacion_pixeles[1])) + ", ---)"
             ptext = '<font size="10">' + linea + '</font>'
             Story.append(Paragraph(ptext, styles["Normal"]))
 
             Story.append(Spacer(1, 5))
 
-            linea = "Posicion 3D Laser: (" + str("{:.2f}".format(laser.laser3D[1].Pos3D_media[0])) + ", " + str("{:.2f}".format(laser.laser3D[1].Pos3D_media[1])) +\
+            linea = "Posicion 3D Laser: (" + str("{:.2f}".format(laser.laser3D[1].Pos3D_media[0])) + ", " + str(
+                "{:.2f}".format(laser.laser3D[1].Pos3D_media[1])) + \
                     ", ---) pixeles"
             ptext = '<font size="10">' + linea + '</font>'
             Story.append(Paragraph(ptext, styles["Normal"]))
 
-            linea = "Posicion 3D Radiacion: (" + str("{:.2f}".format(radiacion.radiacion3D[1].Pos3D_media[0])) + ", " +\
+            linea = "Posicion 3D Radiacion: (" + str("{:.2f}".format(radiacion.radiacion3D[1].Pos3D_media[0])) + ", " + \
                     str("{:.2f}".format(radiacion.radiacion3D[1].Pos3D_media[1])) + ", ---) pixeles"
             ptext = '<font size="10">' + linea + '</font>'
             Story.append(Paragraph(ptext, styles["Normal"]))
@@ -999,8 +1298,9 @@ class Genera_Informe:
             ptext = '<font size="10">' + linea + '</font>'
             Story.append(Paragraph(ptext, styles["Normal"]))
 
-            linea = "Distancia Componentes 2D Laser-Radiacion (X, Y, Z): (" + str("{:.2f}".format(dif_x)) + ", " +\
-                    str("{:.2f}".format(dif_y)) + ", ---) pixeles, (" + str("{:.2f}".format(dif_x * imagenes[0].pixelsizemm)) +\
+            linea = "Distancia Componentes 2D Laser-Radiacion (X, Y, Z): (" + str("{:.2f}".format(dif_x)) + ", " + \
+                    str("{:.2f}".format(dif_y)) + ", ---) pixeles, (" + str(
+                "{:.2f}".format(dif_x * imagenes[0].pixelsizemm)) + \
                     ", " + str("{:.2f}".format(dif_y * imagenes[0].pixelsizemm)) + ", ---) mm"
             ptext = '<font size="10">' + linea + '</font>'
             Story.append(Paragraph(ptext, styles["Normal"]))
@@ -1013,17 +1313,21 @@ class Genera_Informe:
             for i in lista:
                 if i != 4:
                     _x_dif.append(
-                        float(imagenes[i].centro_circulo_pixeles[0] - imagenes[i].centro_radiacion_pixeles[0])*imagenes[i].pixelsizemm)
+                        float(imagenes[i].centro_circulo_pixeles[0] - imagenes[i].centro_radiacion_pixeles[0]) *
+                        imagenes[i].pixelsizemm)
                     _y_dif.append(
-                        float(imagenes[i].centro_circulo_pixeles[1] - imagenes[i].centro_radiacion_pixeles[1])*imagenes[i].pixelsizemm)
+                        float(imagenes[i].centro_circulo_pixeles[1] - imagenes[i].centro_radiacion_pixeles[1]) *
+                        imagenes[i].pixelsizemm)
                     centro_laser_crucetas_colimador.append(imagenes[i].centro_circulo_pixeles)
                     centro_radiacion_crucetas_colimador.append(imagenes[i].centro_radiacion_pixeles)
                 else:
-                    if imagenes[4].centro_circulo_pixeles is not None:
+                    if imagenes[lista[1]].matriz_orig is not None:
                         _x_dif.append(
-                            float(imagenes[i].centro_circulo_pixeles[0] - imagenes[i].centro_radiacion_pixeles[0]) * imagenes[i].pixelsizemm)
+                            float(imagenes[i].centro_circulo_pixeles[0] - imagenes[i].centro_radiacion_pixeles[0]) *
+                            imagenes[i].pixelsizemm)
                         _y_dif.append(
-                            float(imagenes[i].centro_circulo_pixeles[1] - imagenes[i].centro_radiacion_pixeles[1]) * imagenes[i].pixelsizemm)
+                            float(imagenes[i].centro_circulo_pixeles[1] - imagenes[i].centro_radiacion_pixeles[1]) *
+                            imagenes[i].pixelsizemm)
                         centro_laser_crucetas_colimador.append(imagenes[i].centro_circulo_pixeles)
                         centro_radiacion_crucetas_colimador.append(imagenes[i].centro_radiacion_pixeles)
                     else:
@@ -1050,21 +1354,29 @@ class Genera_Informe:
                 ptext = '<font size="10">' + linea + '</font>'
                 Story.append(Paragraph(ptext, styles["Normal"]))
 
+                im = Image(imagenes[i].imagen_para_informe, 2 * inch, 2 * inch)
+                Story.append(im)
+                Story.append(Spacer(1, 12))
+                Story.append(Spacer(1, 12))
+
             Story.append(Spacer(1, 5))
             linea = "Laser X, Y, Z:"
             ptext = '<font size="10">' + linea + '</font>'
             Story.append(Paragraph(ptext, styles["Normal"]))
             Story.append(Spacer(1, 5))
 
-            linea = "... 0: (" + str(imagenes[lista[0]].centro_circulo_pixeles[0]) + ", " + str(imagenes[lista[0]].centro_circulo_pixeles[1]) + ", ---)"
+            linea = "... 0: (" + str(imagenes[lista[0]].centro_circulo_pixeles[0]) + ", " + str(
+                imagenes[lista[0]].centro_circulo_pixeles[1]) + ", ---)"
             ptext = '<font size="10">' + linea + '</font>'
             Story.append(Paragraph(ptext, styles["Normal"]))
 
-            linea = "..90: (" + str(imagenes[lista[1]].centro_circulo_pixeles[0]) + ", " + str(imagenes[lista[1]].centro_circulo_pixeles[1]) + ", ---)"
+            linea = "..90: (" + str(imagenes[lista[1]].centro_circulo_pixeles[0]) + ", " + str(
+                imagenes[lista[1]].centro_circulo_pixeles[1]) + ", ---)"
             ptext = '<font size="10">' + linea + '</font>'
             Story.append(Paragraph(ptext, styles["Normal"]))
 
-            linea = ".270: (" + str(imagenes[lista[2]].centro_circulo_pixeles[0]) + ", " + str(imagenes[lista[2]].centro_circulo_pixeles[1]) + ", ---)"
+            linea = ".270: (" + str(imagenes[lista[2]].centro_circulo_pixeles[0]) + ", " + str(
+                imagenes[lista[2]].centro_circulo_pixeles[1]) + ", ---)"
             ptext = '<font size="10">' + linea + '</font>'
             Story.append(Paragraph(ptext, styles["Normal"]))
 
@@ -1074,29 +1386,29 @@ class Genera_Informe:
             Story.append(Paragraph(ptext, styles["Normal"]))
             Story.append(Spacer(1, 5))
 
-            linea = "... 0: (" + str("{:.2f}".format(imagenes[lista[0]].centro_radiacion_pixeles[0])) + ", " +\
+            linea = "... 0: (" + str("{:.2f}".format(imagenes[lista[0]].centro_radiacion_pixeles[0])) + ", " + \
                     str("{:.2f}".format(imagenes[lista[0]].centro_radiacion_pixeles[1])) + ", ---)"
             ptext = '<font size="10">' + linea + '</font>'
             Story.append(Paragraph(ptext, styles["Normal"]))
 
-            linea = "..90: (" + str("{:.2f}".format(imagenes[lista[1]].centro_radiacion_pixeles[0])) + ", " +\
+            linea = "..90: (" + str("{:.2f}".format(imagenes[lista[1]].centro_radiacion_pixeles[0])) + ", " + \
                     str("{:.2f}".format(imagenes[lista[1]].centro_radiacion_pixeles[1])) + ", ---)"
             ptext = '<font size="10">' + linea + '</font>'
             Story.append(Paragraph(ptext, styles["Normal"]))
 
-            linea = ".270: (" + str("{:.2f}".format(imagenes[lista[2]].centro_radiacion_pixeles[0])) + ", " +\
+            linea = ".270: (" + str("{:.2f}".format(imagenes[lista[2]].centro_radiacion_pixeles[0])) + ", " + \
                     str("{:.2f}".format(imagenes[lista[2]].centro_radiacion_pixeles[1])) + ", ---)"
             ptext = '<font size="10">' + linea + '</font>'
             Story.append(Paragraph(ptext, styles["Normal"]))
 
             Story.append(Spacer(1, 5))
 
-            linea = "Posicion 3D Laser: (" + str("{:.2f}".format(laser.laser3D[2].Pos3D_media[0])) + ", " +\
+            linea = "Posicion 3D Laser: (" + str("{:.2f}".format(laser.laser3D[2].Pos3D_media[0])) + ", " + \
                     str("{:.2f}".format(laser.laser3D[2].Pos3D_media[1])) + ", ---) pixeles"
             ptext = '<font size="10">' + linea + '</font>'
             Story.append(Paragraph(ptext, styles["Normal"]))
 
-            linea = "Posicion 3D Radiacion: (" + str("{:.2f}".format(radiacion.radiacion3D[2].Pos3D_media[0])) +\
+            linea = "Posicion 3D Radiacion: (" + str("{:.2f}".format(radiacion.radiacion3D[2].Pos3D_media[0])) + \
                     ", " + str("{:.2f}".format(radiacion.radiacion3D[2].Pos3D_media[1])) + ", ---) pixeles"
             ptext = '<font size="10">' + linea + '</font>'
             Story.append(Paragraph(ptext, styles["Normal"]))
@@ -1111,14 +1423,15 @@ class Genera_Informe:
             ptext = '<font size="10">' + linea + '</font>'
             Story.append(Paragraph(ptext, styles["Normal"]))
 
-            linea = "Distancia 3D Laser-Radiacion: " + str("{:.2f}".format(distancia3D_pixeles)) + " pixeles, " +\
+            linea = "Distancia 3D Laser-Radiacion: " + str("{:.2f}".format(distancia3D_pixeles)) + " pixeles, " + \
                     str("{:.2f}".format(distancia3D_mm)) + " mm"
             ptext = '<font size="10">' + linea + '</font>'
             Story.append(Paragraph(ptext, styles["Normal"]))
 
-            linea = "Distancia Componentes 2D Laser-Radiacion (X, Y, Z): (" + str("{:.2f}".format(dif_x)) + ", " +\
-                    str("{:.2f}".format(dif_y)) +\
-                    ", ---) pixeles, (" + str("{:.2f}".format(dif_x * imagenes[0].pixelsizemm)) + ", " + str("{:.2f}".format(dif_y * imagenes[0].pixelsizemm)) + ", ---) mm"
+            linea = "Distancia Componentes 2D Laser-Radiacion (X, Y, Z): (" + str("{:.2f}".format(dif_x)) + ", " + \
+                    str("{:.2f}".format(dif_y)) + \
+                    ", ---) pixeles, (" + str("{:.2f}".format(dif_x * imagenes[0].pixelsizemm)) + ", " + str(
+                "{:.2f}".format(dif_y * imagenes[0].pixelsizemm)) + ", ---) mm"
             ptext = '<font size="10">' + linea + '</font>'
             Story.append(Paragraph(ptext, styles["Normal"]))
 
@@ -1129,9 +1442,11 @@ class Genera_Informe:
             lista = [0, 7, 8]
             for i in lista:
                 _x_dif.append(
-                    float(imagenes[i].centro_circulo_pixeles[0] - imagenes[i].centro_radiacion_pixeles[0])*imagenes[0].pixelsizemm)
+                    float(imagenes[i].centro_circulo_pixeles[0] - imagenes[i].centro_radiacion_pixeles[0]) * imagenes[
+                        0].pixelsizemm)
                 _y_dif.append(
-                    float(imagenes[i].centro_circulo_pixeles[1] - imagenes[i].centro_radiacion_pixeles[1])*imagenes[0].pixelsizemm)
+                    float(imagenes[i].centro_circulo_pixeles[1] - imagenes[i].centro_radiacion_pixeles[1]) * imagenes[
+                        0].pixelsizemm)
                 centro_laser_crucetas_mesa.append(imagenes[i].centro_circulo_pixeles)
                 centro_radiacion_crucetas_mesa.append(imagenes[i].centro_radiacion_pixeles)
 
@@ -1206,7 +1521,8 @@ class Genera_Informe:
 
             Story.append(Spacer(1, 5))
             linea = "Laser (X, Y, Z): (" + str("{:.2f}".format(laser.media_x_total_laser)) + ", " + str(
-                "{:.2f}".format(laser.media_y_total_laser)) + ", " + str("{:.2f}".format(laser.media_z_total_laser)) + ")"
+                "{:.2f}".format(laser.media_y_total_laser)) + ", " + str(
+                "{:.2f}".format(laser.media_z_total_laser)) + ")"
             ptext = '<font size="10">' + linea + '</font>'
             Story.append(Paragraph(ptext, styles["Normal"]))
 
@@ -1223,7 +1539,8 @@ class Genera_Informe:
 
             linea = "Distancia Componentes 2D Laser-Radiacion (X, Y, Z): (" + str("{:.2f}".format(x)) + ", " + str(
                 "{:.2f}".format(y)) + ", " + str("{:.2f}".format(z)) + ") pixeles, (" + \
-                    str("{:.2f}".format(x * imagenes[0].pixelsizemm)) + ", " + str("{:.2f}".format(y * imagenes[0].pixelsizemm)) + ", " + str(
+                    str("{:.2f}".format(x * imagenes[0].pixelsizemm)) + ", " + str(
+                "{:.2f}".format(y * imagenes[0].pixelsizemm)) + ", " + str(
                 "{:.2f}".format(z * imagenes[0].pixelsizemm)) + ") mm"
             ptext = '<font size="10">' + linea + '</font>'
             Story.append(Paragraph(ptext, styles["Normal"]))
@@ -1248,7 +1565,8 @@ class Genera_Informe:
                 ptext = '<font size="10">' + linea + '</font>'
                 Story.append(Paragraph(ptext, styles["Normal"]))
 
-                linea = "Radiacion (X, Y, ---): (" + str("{:.2f}".format(radiacion.media_x_total_radiacion)) + ", " + str(
+                linea = "Radiacion (X, Y, ---): (" + str(
+                    "{:.2f}".format(radiacion.media_x_total_radiacion)) + ", " + str(
                     radiacion.media_y_total_radiacion) + ", ---)"
                 ptext = '<font size="10">' + linea + '</font>'
                 Story.append(Paragraph(ptext, styles["Normal"]))
@@ -1312,8 +1630,6 @@ class Genera_Informe:
 
         # Genera imagenes crucetas
         # Gantry
-        ds = dicom.dcmread(imagenes[0].fichero)
-        array = ds.pixel_array
 
         if len(centro_laser_crucetas_gantry) != 0:
             _array_g = Dibuja_cruceta_en_array(array, centro_laser_crucetas_gantry, centro_radiacion_crucetas_gantry, 3,
@@ -1388,6 +1704,7 @@ class Genera_Informe:
 
         doc.build(Story)
 
+
 # Lee de un fichero de texto los nombres de los ficheros de entrada
 class Ppal:
     def __init__(self):
@@ -1411,8 +1728,7 @@ class Ppal:
 
         # Evaluacion de resultados
         print("Evaluando de resultados ...")
-        ge = Evaluacion(gl, gc)
+        ge = Evaluacion(ra.imagenes, gl, gc)
 
         # Generacion de Informe
         Genera_Informe(self.output_path, ra.imagenes, gl, gc)
-
